@@ -45,93 +45,17 @@ jobs:
       - name: Run sync duolingo script
         if: contains(env.TYPE, 'duolingo')
         run: |
-          python -m github_heatmap duolingo --duolingo_user_name ${{ secrets.DUOLINGO_USER_NAME }} --duolingo_jwt ${{ secrets.DUOLINGO_JWT }} --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python cli.py --type duolingo --duolingo_user_name ${{ secrets.DUOLINGO_USER_NAME }} --duolingo_jwt ${{ secrets.DUOLINGO_JWT }} --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
 
       - name: Run sync weread script
         if: contains(env.TYPE, 'weread')
         run: |
-          python -m github_heatmap weread --weread_cookie ${{ secrets.WEREAD_COOKIE }} --me "读书时长统计 @ 微信读书" --track-color=#ACE7AE --special-color1=#69C16E --special-color2=#549F57 --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python cli.py --type weread --weread_cookie ${{ secrets.WEREAD_COOKIE }} --me "读书时长统计 @ 微信读书" --track-color=#ACE7AE --special-color1=#69C16E --special-color2=#549F57 --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
           
       - name: Run sync NotionData script
         if: contains(env.TYPE, 'notiondata')
         run: |
-          python -m github_heatmap notiondata --notiondata_token ${{ secrets.NOTION_TOKEN }} --notion_database_id ${{ secrets.NOTION_DATABASE_ID}} --notion_date_name "日期" --notion_prop_name "工作时长" --notion_filter "类型#每日记录" --me "工作时长统计 @ Notion" --track-color=#FDD1CE --special-color1=#FD756C --special-color2=#FD473A --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
-
-      - name: Run sync ns script
-        if: contains(env.TYPE, 'ns')
-        run: |
-          python -m github_heatmap ns --ns_session_token ${{ secrets.NS_SESSION_TOKEN }} --ns_device_id ${{ secrets.NS_DEVICE_ID }} --me ${{ env.ME }}
-
-      - name: Run sync strava script
-        if: contains(env.TYPE, 'strava')
-        run: |
-          python -m github_heatmap strava --strava_client_id ${{ secrets.STRAVA_CLIENT_ID }} --strava_client_secret ${{ secrets.STRAVA_CLIENT_SECRET }} --strava_refresh_token ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }} --me ${{ env.ME }} --year 2012-$(date +"%Y") --is-circular
-
-      - name: Run sync shanbay script
-        if: contains(env.TYPE, 'shanbay')
-        run: |
-          python -m github_heatmap shanbay --shanbay_user_name ${{ secrets.SHANBAY_USER_NAME }}  --special-color1 '#33C6A4' --special-color2  '#33C6A4' --me ${{ env.ME }}
-
-      - name: Run sync cichang script
-        if: contains(env.TYPE, 'cichang')
-        run: |
-          python -m github_heatmap cichang --cichang_user_name ${{ secrets.CICHANG_USER_NAME }} --password ${{ secrets.CICHANG_PASSWORD }} --me ${{ env.ME }}
-
-      - name: Run sync forest script
-        if: contains(env.TYPE, 'forest')
-        run: |
-          python -m github_heatmap forest --forest_email ${{ secrets.FOREST_EMAIL }} --forest_password ${{ secrets.FOREST_PASSWORD }} --year $(date +"%Y") --cn
-
-      - name: Run sync issue script
-        if: contains(env.TYPE, 'issue')
-        run: |
-          python -m github_heatmap issue --issue_number ${{ secrets.ISSUE_NUMBER }} --repo_name ${{ secrets.REPO_NAME }} --github_token ${{ secrets.G_T }} --me ${{ env.ME }}
-
-      - name: Run sync leetcode script
-        if: contains(env.TYPE, 'leetcode')
-        run: |
-          python -m github_heatmap leetcode --leetcode_cookie  "${{ secrets.LEETCODE_COOKIE }}" --me ${{ env.ME }}
-
-      - name: Run sync github script
-        if: contains(env.TYPE, 'github')
-        run: |
-          python -m github_heatmap github --github_user_name ${{ secrets.G_USER_NAME }} --me ${{ env.ME }} --with-animation --stand-with-ukraine
-
-      - name: Run sync gitlab script
-        if: contains(env.TYPE, 'gitlab')
-        run: |
-          python -m github_heatmap gitlab --gitlab_user_name ${{ secrets.GITLAB_USER_NAME }} --me ${{ env.ME }} --with-animation
-
-      - name: Run sync kindle script
-        if: contains(env.TYPE, 'kindle')
-        run: |
-          python -m github_heatmap kindle --kindle_cookie  '${{ secrets.KINDLE_COOKIE }} --me ${{ env.ME }}
-
-      - name: Run sync bilibili script
-        if: contains(env.TYPE, 'bilibili')
-        run: |
-          python3 -m github_heatmap bilibili --bilibili_cookie "${{ secrets.BILIBILI_COOKIE }}" --me ${{ env.ME }}
-
-      - name: Run sync wakatime script
-        if: contains(env.TYPE, 'wakatime')
-        run: |
-          python3 -m github_heatmap wakatime --wakatime_key "${{ secrets.WAKATIME_KEY }}" --me ${{ env.ME }}
-
-      - name: Run sync dota2 script
-        if: contains(env.TYPE, 'dota2')
-        run: |
-          python3 -m github_heatmap dota2 --dota2_id "${{ secrets.DOTA2_ID }}" --me ${{ env.ME }}
-
-      - name: Run sync openlanguage script
-        if: contains(env.TYPE, 'openlanguage')
-        run: |
-          python3 -m github_heatmap openlanguage --openlanguage_user_name "${{ secrets.OPENLANGUAGE_USER_NAME }}" --openlanguage_password "${{ secrets.OPENLANGUAGE_PASSWORD }}" --me ${{ env.ME }}
-
-      # change the types to yours
-      - name: Run sync multiple script
-        if: contains(env.TYPE, 'multiple')
-        run: |
-          python3 -m github_heatmap multiple --types "github" --github_user_name ${{ secrets.G_USER_NAME }}  --year 2019-$(date +"%Y") 
+          python cli.py --type notiondata --notiondata_token ${{ secrets.NOTION_TOKEN }} --notion_database_id ${{ secrets.NOTION_DATABASE_ID}} --notion_date_name "日期" --notion_prop_name "工作时长" --notion_filter "类型#每日记录" --me "工作时长统计 @ Notion" --track-color=#FDD1CE --special-color1=#FD756C --special-color2=#FD473A --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
 
       - name: Push new postger
         run: |
