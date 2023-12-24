@@ -133,11 +133,6 @@ jobs:
         run: |
           python3 -m github_heatmap multiple --types "github" --github_user_name ${{ secrets.G_USER_NAME }}  --year 2019-$(date +"%Y") 
 
-      - name: Mv svg files to examples
-        # only for me to show
-        if: github.repository_owner == 'yihong0618'
-        run: mv OUT_FOLDER/*.svg examples/
-
       - name: Push new postger
         run: |
           git config --local user.email "action@github.com"
