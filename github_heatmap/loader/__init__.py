@@ -19,6 +19,7 @@ from github_heatmap.loader.leetcode_loader import LeetcodeLoader
 from github_heatmap.loader.multiple_loader import MultipleLoader
 from github_heatmap.loader.neodb_loader import NeoDBLoader
 from github_heatmap.loader.notion_loader import NotionLoader
+from github_heatmap.loader.notiondata_loader import NotionDataLoader
 from github_heatmap.loader.nrc_loader import NRCLoader
 from github_heatmap.loader.ns_loader import NSLoader
 from github_heatmap.loader.openlanguage_loader import OpenLanguageLoader
@@ -51,6 +52,7 @@ LOADER_DICT = {
     "multiple": MultipleLoader,
     "nike": NRCLoader,
     "notion": NotionLoader,
+    "notiondata":NotionDataLoader,
     "garmin": GarminLoader,
     "forest": ForestLoader,
     "json": JsonLoader,
@@ -83,6 +85,7 @@ __all__ = (
     "YouTubeLoader",
     "MultipleLoader",
     "NotionLoader",
+    "NotionDataLoader",
     "NRCLoader",
     "LOADER_DICT",
     "ForestLoader",

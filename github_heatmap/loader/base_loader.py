@@ -171,6 +171,12 @@ class BaseLoader(ABC):
             help="add animation to the poster",
         )
         group.add_argument(
+            "--with-statistics",
+            dest="with_statistics",
+            action="store_true",
+            help="add statistics to the poster",
+        )
+        group.add_argument(
             "--animation-time",
             dest="animation_time",
             type=int,

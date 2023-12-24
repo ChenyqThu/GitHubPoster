@@ -36,6 +36,7 @@ TYPE_INFO_DICT = {
     "bilibili": "bilibili",
     "nike": "Nike",
     "strava": "Strava",
+    "notiondata":"Notion",
     "ns": "NS",
     "kindle": "Kindle",
     "garmin": "Garmin",

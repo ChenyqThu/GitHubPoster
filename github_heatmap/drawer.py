@@ -19,9 +19,9 @@ class Drawer:
 
     def __init__(self, p):
         self.poster = p
-        self.year_size = 80 * 3.0 / 80.0
-        self.year_style = f"font-size:{self.year_size}px; font-family:Arial;"
-        self.year_length_style = f"font-size:{80 * 3.0 / 80.0}px; font-family:Arial;"
+        self.year_size = 80 * 5.0 / 80.0
+        self.year_style = f"font-size:{self.year_size}px; font-family:Arial;font-weight:bold;"
+        self.year_length_style = f"font-size:{80 * 4.0 / 80.0}px; font-family:Arial;"
         self.month_names_style = "font-size:2.5px; font-family:Arial"
 
     @property
@@ -149,16 +149,31 @@ class Drawer:
         github_rect_day = github_rect_first_day + datetime.timedelta(
             -start_date_weekday
         )
-        year_length = self.poster.total_sum_year_dict.get(year, 0)
+
+        year_data = self.poster.total_sum_year_dict.get(year, {})
+        year_length = year_data.get("total", 0)
+        year_average = year_data.get("average", 0.0)
+        year_max = year_data.get("max",0.0)
+        year_min = year_data.get("min",0.0)
+        year_standard_deviation = year_data.get("standard_deviation", 0.0)
+        year_longest_streak = year_data.get("longest_streak", 0)
+        year_count = year_data.get("count", 0)
         year_units = self.poster.units
         if self.poster.units == "mins":
             year_length = int(year_length / 60)
-            # change to hours from mins
+            year_average = round(year_average / 60, 2)  # 保留两位小数
+            year_max = round(year_max / 60, 2)
+            year_min = round(year_min / 60, 2)
+            year_standard_deviation = round(year_standard_deviation / 60, 2)  # 保留两位小数
             year_units = "hours"
+        year_units = "小时" if year_units=="hours" else year_units
         year_length = str(int(year_length)) + f" {year_units}"
+        year_average_str = f"{year_average} {year_units}"
+        year_standard_deviation_str = f"{year_standard_deviation} {year_units} (最大{year_max} {year_units} | 最小{year_min} {year_units})"
+
         dr.add(
             dr.text(
-                f"{year}: {year_length}" if _type is None else f"{_type}",
+                f"{year}" if _type is None else f"{_type}",
                 insert=offset.tuple(),
                 fill=self.poster.colors["text"],
                 dominant_baseline="hanging",
@@ -166,16 +181,16 @@ class Drawer:
             )
         )
 
-        # if not self.poster.is_multiple_type:
-        #     dr.add(
-        #         dr.text(
-        #             f"{year_length}",
-        #             insert=(offset.tuple()[0] + 165, offset.tuple()[1] + 5),
-        #             fill=self.poster.colors["text"],
-        #             dominant_baseline="hanging",
-        #             style=self.year_length_style,
-        #         )
-        #     )
+        if not self.poster.is_multiple_type:
+            dr.add(
+                dr.text(
+                    f"{year_length}",
+                    insert=(offset.tuple()[0] + 165, offset.tuple()[1]),
+                    fill=self.poster.colors["text"],
+                    dominant_baseline="hanging",
+                    style=self.year_length_style,
+                )
+            )
         # add month name up to the poster one by one
         # because of svg text auto trim the spaces.
         for num, name in enumerate(MONTH_NAMES):
@@ -230,6 +245,25 @@ class Drawer:
                 github_rect_day += datetime.timedelta(1)
             rect_x += 3.5
         offset.y += 3.5 * 9 + self.year_size + 1.0
+
+        if self.poster.with_statistics:
+            #补充统计数值
+            unit = "时长" if year_units == "时长" else year_units
+            stat_texts = [
+                f"总天数：{year_count} 天",
+                f"总{unit}：{year_length}",
+                f"平均{unit}：{year_average_str}",
+                f"标准差：{year_standard_deviation_str}",
+                f"最长连续天数：{year_longest_streak} 天"
+            ]
+            stat_style = "font-size:4px; font-family:Arial"
+            stat_y_offset = offset.y + 2
+            for stat_text in stat_texts:
+                dr.add(dr.text(stat_text, insert=(10, stat_y_offset), fill=self.poster.colors["text"], style=stat_style))
+                stat_y_offset += 5  # 调整行间距
+
+            # 更新 offset.y，假设每行统计信息高度为5mm
+            offset.y += len(stat_texts) * 5 + 2  # 5为行高，2为额外间距
 
     def draw(self, dr, offset, is_summary=False):
         if self.poster.tracks is None:

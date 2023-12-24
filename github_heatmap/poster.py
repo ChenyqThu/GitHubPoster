@@ -2,6 +2,8 @@
 from collections import defaultdict
 
 import svgwrite
+import math
+from datetime import date, timedelta
 
 from github_heatmap.structures import XY, ValueRange
 
@@ -28,6 +30,7 @@ class Poster:
         self.tracks_drawer = None
         self.trans = None
         self.with_animation = False
+        self.with_statistics = False
         self.animation_time = 10
         self.year_tracks_date_count_dict = defaultdict(int)
         self.year_tracks_type_dict = defaultdict(dict)
@@ -54,6 +57,9 @@ class Poster:
     @property
     def is_multiple_type(self):
         return len(self.type_list) > 1
+
+    def set_with_statistics(self, with_statistics):
+        self.with_statistics = with_statistics
 
     def set_with_animation(self, with_animation):
         self.with_animation = with_animation
@@ -100,13 +106,48 @@ class Poster:
 
     def __draw_footer(self, d):
         self.tracks_drawer.draw_footer(d)
-
+    
     def compute_track_statistics(self, t):
-        total_sum_year_dict = defaultdict(int)
-        for date, num in self.tracks.items():
-            if type(num) is dict:
-                total_sum_year_dict[int(date[:4])] += num.get(t, 0)
-            else:
-                total_sum_year_dict[int(date[:4])] += num
+        total_sum_year_dict = defaultdict(lambda: {"total": 0, "count": 0, "average": 0.0, 
+                                                "longest_streak": 0, "current_streak": 0, 
+                                                "values": [], "standard_deviation": 0.0,"max":0.0,"min":1000.0})
+        
+        # 确保按日期升序遍历
+        for year in self.years:
+            start_date = date(year, 1, 1)
+            end_date = date(year, 12, 31)
+
+            current_date = start_date
+            while current_date <= end_date:
+                str_date = current_date.strftime("%Y-%m-%d")
+                num = self.tracks.get(str_date, {t: 0})
+                value = num.get(t, 0) if isinstance(num, dict) else num  # 此处进行了修改
+                total_sum_year_dict[year]["total"] += value
+                if value > 0:
+                    total_sum_year_dict[year]["values"].append(value)
+                    total_sum_year_dict[year]["count"] += 1
+                    total_sum_year_dict[year]["current_streak"] += 1
+                    if total_sum_year_dict[year]["current_streak"] > total_sum_year_dict[year]["longest_streak"]:
+                        total_sum_year_dict[year]["longest_streak"] = total_sum_year_dict[year]["current_streak"]
+                    if value > total_sum_year_dict[year]["max"]:  # Update max duration
+                        total_sum_year_dict[year]["max"] = value
+                    if value < total_sum_year_dict[year]["min"]:  # Update min duration
+                        total_sum_year_dict[year]["min"] = value
+                else:
+                    total_sum_year_dict[year]["current_streak"] = 0
+                current_date += timedelta(days=1)
+
+            # 计算平均值和标准差
+            for year, data in total_sum_year_dict.items():
+                data['max'] = round(data['max'],2)
+                data['min'] = round(data['min'],2)
+                count = data["count"]
+                values = data["values"]
+                total = data["total"]
+                average = total / count if count else 0
+                data["average"] = round(average, 2)
+                variance = sum((x - average) ** 2 for x in values) / count if count else 0
+                data["standard_deviation"] = round(math.sqrt(variance), 2)
+
         self.total_sum_year_dict = total_sum_year_dict
         return total_sum_year_dict

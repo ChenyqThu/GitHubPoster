@@ -60,6 +60,7 @@ def run():
 
     # set animate
     p.set_with_animation(args.with_animation)
+    p.set_with_statistics(args.with_statistics)
     p.set_animation_time(args.animation_time)
     from_year, to_year = parse_years(args.year)
     args_dict = dict(args._get_kwargs())
@@ -116,8 +117,9 @@ def run():
     if args.special_number2:
         p.special_number["special_number2"] = args.special_number2
     # the length of this poster
+    year_height = 60 if args.with_statistics else 43
     poster_length = len(p.years) if args.type != "summary" else len(loader.loader_list)
-    p.height = 35 + poster_length * 43
+    p.height = 35 + poster_length * year_height
     if not os.path.exists(OUT_FOLDER):
         os.mkdir(OUT_FOLDER)
     # support different issues, maybe better way
