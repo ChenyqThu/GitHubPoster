@@ -45,17 +45,17 @@ jobs:
       - name: Run sync duolingo script
         if: contains(env.TYPE, 'duolingo')
         run: |
-          python github_heatmap/cli.py duolingo --duolingo_user_name ${{ secrets.DUOLINGO_USER_NAME }} --duolingo_jwt ${{ secrets.DUOLINGO_JWT }} --year 2023 --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python github_heatmap/cli.py duolingo --duolingo_user_name "${{secrets.DUOLINGO_USER_NAME}}" --duolingo_jwt "${{secrets.DUOLINGO_JWT}}" --year 2023 --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
 
       - name: Run sync weread script
         if: contains(env.TYPE, 'weread')
         run: |
-          python github_heatmap/cli.py weread --weread_cookie ${{ secrets.WEREAD_COOKIE }} --me "读书时长统计 @ 微信读书" --track-color=#ACE7AE --special-color1=#69C16E --special-color2=#549F57 --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python github_heatmap/cli.py weread --weread_cookie "${{secrets.WEREAD_COOKIE}}" --me "读书时长统计 @ 微信读书" --track-color=#ACE7AE --special-color1=#69C16E --special-color2=#549F57 --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
           
       - name: Run sync NotionData script
         if: contains(env.TYPE, 'notiondata')
         run: |
-          python github_heatmap/cli.py notiondata --notiondata_token ${{ secrets.NOTION_TOKEN }} --notion_database_id ${{ secrets.NOTION_DATABASE_ID}} --notion_date_name "日期" --notion_prop_name "工作时长" --notion_filter "类型#每日记录" --me "工作时长统计 @ Notion" --track-color=#FDD1CE --special-color1=#FD756C --special-color2=#FD473A --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python github_heatmap/cli.py notiondata --notiondata_token "${{secrets.NOTION_TOKEN}}" --notion_database_id "${{secrets.NOTION_DATABASE_ID}}" --notion_date_name "日期" --notion_prop_name "工作时长" --notion_filter "类型#每日记录" --me "工作时长统计 @ Notion" --track-color=#FDD1CE --special-color1=#FD756C --special-color2=#FD473A --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
 
       - name: Push new postger
         run: |
