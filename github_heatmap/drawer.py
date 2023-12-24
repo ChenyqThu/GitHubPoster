@@ -157,7 +157,7 @@ class Drawer:
         year_min = year_data.get("min",0.0)
         year_standard_deviation = year_data.get("standard_deviation", 0.0)
         year_longest_streak = year_data.get("longest_streak", 0)
-        year_count = year_data.get("count", 0)
+        year_count_days = year_data.get("count", 0)
         year_units = self.poster.units
         if self.poster.units == "mins":
             year_length = int(year_length / 60)
@@ -169,7 +169,7 @@ class Drawer:
         year_units = "小时" if year_units=="hours" else year_units
         year_length = str(int(year_length)) + f" {year_units}"
         year_average_str = f"{year_average} {year_units}"
-        year_standard_deviation_str = f"{year_standard_deviation} {year_units} (最大{year_max} {year_units} | 最小{year_min} {year_units})"
+        year_standard_deviation_str = f"{year_standard_deviation} {year_units} (最大{year_max}{year_units} | 最小{year_min}{year_units})"
 
         dr.add(
             dr.text(
@@ -250,7 +250,7 @@ class Drawer:
             #补充统计数值
             unit = "时长" if year_units == "时长" else year_units
             stat_texts = [
-                f"总天数：{year_count} 天",
+                f"总天数：{year_count_days} 天",
                 f"总{unit}：{year_length}",
                 f"平均{unit}：{year_average_str}",
                 f"标准差：{year_standard_deviation_str}",
