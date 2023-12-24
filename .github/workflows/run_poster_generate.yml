@@ -45,7 +45,7 @@ jobs:
       - name: Run sync duolingo script
         if: contains(env.TYPE, 'duolingo')
         run: |
-          python github_heatmap/cli.py duolingo --duolingo_user_name ${{ secrets.DUOLINGO_USER_NAME }} --duolingo_jwt ${{ secrets.DUOLINGO_JWT }} --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
+          python github_heatmap/cli.py duolingo --duolingo_user_name ${{ secrets.DUOLINGO_USER_NAME }} --duolingo_jwt ${{ secrets.DUOLINGO_JWT }} --year 2023 --me "英语学习统计 @ Duolingo" --track-color=#6495ED --special-color1=#0000CD --special-color2=#0000FF --with-animation --with-statistics --animation-time 10 --without-type-name --dom-color=#EBEDF0 --text-color=#000000 --background-color=#ffffff
 
       - name: Run sync weread script
         if: contains(env.TYPE, 'weread')
