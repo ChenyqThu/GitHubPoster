@@ -257,13 +257,13 @@ class Drawer:
                 f"最长连续天数：{year_longest_streak} 天"
             ]
             stat_style = "font-size:4px; font-family:Arial"
-            stat_y_offset = offset.y + 2
+            stat_y_offset = offset.y + 3
             for stat_text in stat_texts:
                 dr.add(dr.text(stat_text, insert=(10, stat_y_offset), fill=self.poster.colors["text"], style=stat_style))
-                stat_y_offset += 5  # 调整行间距
+                stat_y_offset += 6  # 调整行间距
 
             # 更新 offset.y，假设每行统计信息高度为5mm
-            offset.y += len(stat_texts) * 5 + 2  # 5为行高，2为额外间距
+            offset.y += len(stat_texts) * 6 + 3  # 5为行高，2为额外间距
 
     def draw(self, dr, offset, is_summary=False):
         if self.poster.tracks is None:
