@@ -23,7 +23,7 @@ class Poster:
             "special": "#FFFF00",
             "track": "#4DD2FF",
         }
-        self.width = 200
+        self.width = 205
         self.height = 300
         self.years = None
         # maybe support more type
@@ -88,7 +88,7 @@ class Poster:
         self.tracks_drawer = drawer
         d = svgwrite.Drawing(output, (f"{width}mm", f"{height}mm"))
         d.viewbox(0, 0, self.width, height)
-        d.add(d.rect((0, 0), (width, height), fill=self.colors["background"], rx=2, ry=2, stroke='gray', stroke_width=0.2))
+        d.add(d.rect((1, 1), (width-2, height-2), fill=self.colors["background"], rx=2, ry=2, stroke='gray', stroke_width=0.2))
         self.__draw_header(d)
         self.__draw_tracks(d, XY(10, 14))
         # for multiple types show

@@ -168,8 +168,8 @@ class Drawer:
             year_units = "hours"
         year_units = "小时" if year_units=="hours" else year_units
         year_length = str(int(year_length)) + f" {year_units}"
-        year_average_str = f"{year_average} {year_units}"
-        year_standard_deviation_str = f"{year_standard_deviation} {year_units} (最大{year_max}{year_units} | 最小{year_min}{year_units})"
+        year_average_str = f"{year_average} {year_units}（🔺{year_max} 🔻{year_min} ）"
+        year_standard_deviation_str = f"{year_standard_deviation} {year_units}"
 
         dr.add(
             dr.text(
@@ -181,7 +181,7 @@ class Drawer:
             )
         )
 
-        if not self.poster.is_multiple_type:
+        if not self.poster.is_multiple_type and not self.poster.with_statistics:
             dr.add(
                 dr.text(
                     f"{year_length}",
@@ -249,21 +249,28 @@ class Drawer:
         if self.poster.with_statistics:
             #补充统计数值
             unit = "时长" if year_units == "时长" else year_units
+            font_size = 4
+            # 定义样式
+            label_style = f"font-size:{font_size}px; font-family:Arial; fill:grey"  # 标签样式为灰色
+            value_style = f"font-size:{font_size}px; font-family:Arial; font-weight:bold"  # 值样式加粗
+
             stat_texts = [
-                f"总天数：{year_count_days} 天",
-                f"总{unit}：{year_length}",
-                f"平均{unit}：{year_average_str}",
-                f"标准差：{year_standard_deviation_str}",
-                f"最长连续天数：{year_longest_streak} 天"
+                {"label": f"🔷总天数：", "value": f"{year_count_days}天"},
+                {"label": f"🔶总{unit}：", "value": f"{year_length}"},
+                {"label": f"🔹平均{unit}：", "value": f"{year_average_str}"},
+                {"label": f"🔸标准差：", "value": f"{year_standard_deviation_str}"},
+                {"label": f"🔥最长连续天数：", "value": f"{year_longest_streak}天"}
             ]
-            stat_style = "font-size:4px; font-family:Arial"
+            
             stat_y_offset = offset.y + 3
-            for stat_text in stat_texts:
-                dr.add(dr.text(stat_text, insert=(10, stat_y_offset), fill=self.poster.colors["text"], style=stat_style))
+            for stat in stat_texts:
+                label_width = len(stat["label"]) * font_size
+                dr.add(dr.text(stat["label"], insert=(10, stat_y_offset), style=label_style))
+                dr.add(dr.text(stat["value"], insert=(10 + label_width, stat_y_offset), style=value_style))
                 stat_y_offset += 6  # 调整行间距
 
-            # 更新 offset.y，假设每行统计信息高度为5mm
-            offset.y += len(stat_texts) * 6 + 3  # 5为行高，2为额外间距
+            # 更新 offset.y
+            offset.y += len(stat_texts) * 6 + 3
 
     def draw(self, dr, offset, is_summary=False):
         if self.poster.tracks is None:
